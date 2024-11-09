@@ -6,6 +6,7 @@ from random import choice
 from redis import Redis
 from json import loads, dumps
 from base64 import b64encode, b64decode
+from os import environ
 
 #import logging
 #logger = logging.getLogger("waitress")
@@ -43,7 +44,7 @@ class TelusTV:
 		self.__app = self.__setup_flask()
 
 		# Setup Redis client for caching
-		self.__redisClient = Redis(host="redis_cache", port=6379, db=0)
+		self.__redisClient = Redis(host=environ["REDIS_HOST"], port=6379, db=0)
 
 		# Set encoding | CAN CUSTOMIZE (Default=UTF-8 / Any other encoding format)
 		self.encoding = "UTF-8"
