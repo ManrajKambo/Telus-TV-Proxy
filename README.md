@@ -34,11 +34,11 @@ Some good practices for content protection are to:
 3. Implement dynamic stream links with expiry, take notes from River TV (https://www.rivertv.ca)
 4. Rotate content (drm) keys regularly, take notes from Sling TV (https://www.sling.com)
 
-<small>Comcast's DRM solution is pretty good, but they should try to implement 2-4.. I had obtained drm keys from Shaw, Rogers, Cox, as well as a few other providers that use Comcast's DRM solution a few years back. Those keys still work to this day...</small>
+Comcast's DRM solution is pretty good, but they should try to implement 2-4.. I had obtained drm keys from Shaw, Rogers, Cox, as well as a few other providers that use Comcast's DRM solution a few years back. Those keys still work to this day...
 
 The main focus for this project was Telus, as they don't appear to impliment any of the mentioned stuff. 
 
-<small>Ever since Telus had the On-The-Go TV platform, I was able to obtain all of their DRM keys for tv channels. Telus TV+ is ight with the API rate limiting, but they should prob implement some content protection as I am still able to get the drm keys, despite them now using Verimatrix's DRM solution (https://www.verimatrix.com)</small>
+Ever since Telus had the On-The-Go TV platform, I was able to obtain all of their DRM keys for tv channels. Telus TV+ is ight with the API rate limiting, but they should prob implement some content protection as I am still able to get the drm keys, despite them now using Verimatrix's DRM solution (https://www.verimatrix.com)
 
 ##
 
@@ -46,8 +46,6 @@ The main focus for this project was Telus, as they don't appear to impliment any
 <summary>Can you contact me for some DRM keys?</summary>
 <b>No, Fuck off!</b>
 </details>
-
-</br>
 
 <details open>
 <summary>License</summary>

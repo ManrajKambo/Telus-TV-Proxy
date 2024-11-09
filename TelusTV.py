@@ -19,7 +19,7 @@ class TelusTV:
 		# If some other value than False, client CDN-LOOP header must exist and be string | CAN CUSTOMIZE (Default=False / Your custom value)
 		self.cdnLoop = False
 
-		# You can customize the Server header | CAN CUSTOMIZE (Default=Telus / Your custom value)
+		# You can customize the Server header | CAN CUSTOMIZE (Default=TelusTV+ / Your custom value)
 		self.serverHeader = "TelusTV+"
 
 		# Send these headers with requests | CAN CUSTOMIZE (I'd reccommend doing `tv.requestHeaders["Header-Key"] = "Header-Value"` for appending headers)
