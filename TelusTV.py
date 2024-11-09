@@ -14,7 +14,7 @@ from os import environ
 
 class TelusTV:
 	def __init__(self, max_streamer = 5):
-		# If some other value than False, client User-Agent header must contain string | CAN CUSTOMIZE (Default=False / Your custom value)
+		# If some other value than False, client User-Agent header must exist and be string | CAN CUSTOMIZE (Default=False / Your custom value)
 		self.allowedUserAgent = False
 
 		# If some other value than False, client CDN-LOOP header must exist and be string | CAN CUSTOMIZE (Default=False / Your custom value)
