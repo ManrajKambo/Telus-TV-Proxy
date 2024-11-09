@@ -1,0 +1,20 @@
+services:
+  telus_tv_app:
+    build:
+      context: .
+    container_name: telus_tv_proxy
+    ports:
+      - "80:80"
+    depends_on:
+      - tv_redis_cache
+    environment:
+      - REDIS_HOST=tv_redis_cache
+    restart: always
+
+  tv_redis_cache:
+    image: redis:latest
+    container_name: tv_redis_cache
+    expose:
+      - "6379"
+    privileged: true
+    restart: always
