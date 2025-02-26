@@ -1,5 +1,5 @@
 # Telus TV+ Proxy
-<i>Proxy all Telus TV+ channels from one host url (DRM KEYS NOT INCLUDED NOR WILL BE)</i>
+<i>Proxy all Telus TV+ channels from one host url.</i>
 
 What I created here just acts as a proxy to Telus TV+ streaming servers.
 
@@ -26,6 +26,29 @@ NOTE: This app utilizes Redis for caching. By default, the MPEG-DASH manifest is
 
 ##
 
+Update 2 - DVR Compatibility
+
+I added DVR Compatibility. DVR Catch Up works when playing streams in the TiviMate app (https://tivimate.com/)
+
+M3U Playlist example:
+```
+#EXTM3U url-tvg="https://github.manrajkambo.ca/Telus-TV-EPG/releases/download/latest/epg.xml" x-tvg-url="https://github.manrajkambo.ca/Telus-TV-EPG/releases/download/latest/epg.xml"
+
+#KODIPROP:inputstream.adaptive.license_type=clearkey
+#KODIPROP:inputstream.adaptive.license_key={DRM-KEY-ID}:{DRM-KEY}
+#EXTINF:-1 id="300" channel-id="300" channel-number="300" tvg-id="TELUS.AETVHD" tvg-name="A&E Canada [AETVHD]" tvg-logo="https://gn-images-stb-opus.cdn.avp.telus.net/assets/s55097_ld_h9_aa.png" group-title="English" catchup="default",A&E Canada [AETVHD]
+http://your.server.ip:port/232006003096.mpd
+```
+
+DVR requests look like this:
+/232006003096.mpd?utc=EPOCHSTART&lutc=EPOCHEND
+
+EX: /232006003096.mpd?utc=1740607498&lutc=1740608991
+
+NOTE: Seconds are ignored, requests are translated to the nearest minute.
+
+##
+
 Most ISPs don't know how to properly implement content protection. It doesn't help that Widevine can be easily decrypted, so that's why we here now.
 
 Some good practices for content protection are to:
@@ -38,14 +61,9 @@ Comcast's DRM solution is pretty good, but they should try to implement 2-4.. I 
 
 The main focus for this project was Telus, as they don't appear to implement any of the mentioned stuff. 
 
-Ever since Telus had the On-The-Go TV platform, I was able to obtain all of their DRM keys for tv channels. Telus TV+ is ight with the API rate limiting, but they should prob implement some content protection as I am still able to get the drm keys, despite them now using Verimatrix's DRM solution (https://www.verimatrix.com)
+Since Telus introduced their On-The-Go TV platform, I was able to obtain all of their DRM (Digital Rights Management) keys for various TV channels. While Telus TV+ has improved with API rate limiting, they should probably implement additional content protection measures, as I am still able to access the DRM keys despite them now using Verimatrix's DRM solution (https://www.verimatrix.com).
 
 ##
-
-<details close>
-<summary>Can you contact me for some DRM keys?</summary>
-<b>No, Fuck off!</b>
-</details>
 
 <details open>
 <summary>License</summary>

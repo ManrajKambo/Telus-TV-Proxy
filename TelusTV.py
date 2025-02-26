@@ -7,6 +7,7 @@ from redis import Redis
 from json import loads, dumps
 from base64 import b64encode, b64decode
 from os import environ
+from datetime import datetime, timezone
 
 #import logging
 #logger = logging.getLogger("waitress")
@@ -155,12 +156,15 @@ class TelusTV:
 		return headers
 
 	# Return manifest and response headers when found which server a channel is running on
-	def __test_link(self, link, channel):
+	def __test_link(self, link, channel, dvr_start, dvr_end):
 		url_base = f"https://{link}{self.__baseURL}/{channel}/vxfmt=dp/%s"
 		link_base = "manifest.mpd?device_profile=dashvmx"
 
+		if dvr_start and dvr_end:
+			link_base += f"&start_time={dvr_start}&end_time={dvr_end}"
+
 		redirect_url = url_base % link_base
-		redirect_request = head(redirect_url, headers=self.requestHeaders, verify=True, proxies=self.__proxies)
+		redirect_request = head(redirect_url, headers=self.requestHeaders, verify=False, proxies=self.__proxies) # Changed verify=True to verify=False due to the hour-ish outage they had due to a SSL configuration issue on Feb 25, 2025 - https://www.reddit.com/r/telus/s/0PlIdcLbH1
 		response_headers = redirect_request.headers
 
 		if "Location" not in response_headers:
@@ -193,14 +197,14 @@ class TelusTV:
 
 	And returns manifest and response headers if link is valid and channel found
 	'''
-	def __find_server(self, channel):
+	def __find_server(self, channel, dvr_start, dvr_end):
 		resp = {
 			"Headers": {},
 			"Content": False
 		}
 
 		with ThreadPoolExecutor() as executor:
-			future_to_link = {executor.submit(self.__test_link, link, channel): link for link in self.__links}
+			future_to_link = {executor.submit(self.__test_link, link, channel, dvr_start, dvr_end): link for link in self.__links}
 
 			for future in as_completed(future_to_link):
 				link = future_to_link[future]
@@ -297,15 +301,20 @@ class TelusTV:
 		if check_client_request:
 			return check_client_request
 
+		utc = request.args.get("utc", type=int)
+		lutc = request.args.get("lutc", type=int)
+		utc_iso = datetime.fromtimestamp(utc, tz=timezone.utc).strftime("%Y-%m-%dT%H:%M:00Z") if utc else ""
+		lutc_iso = datetime.fromtimestamp(lutc, tz=timezone.utc).strftime("%Y-%m-%dT%H:%M:00Z") if lutc else ""
+
 		# Set cache key
-		redis_key = f"manifest:{access_url_id}"
+		redis_key = f"manifest:{access_url_id}:{utc}-{lutc}"
 
 		# Try to fetch from Redis
 		check_cache = self.__get_redis_cache(redis_key)
 		if check_cache:
 			return check_cache
 
-		output = self.__find_server(access_url_id)
+		output = self.__find_server(access_url_id, utc_iso, lutc_iso)
 		if output:
 			# Cache the response in Redis
 			self.__set_redis_cache(redis_key, self.manifestCacheSeconds, output["Content"], False, output["Headers"])
