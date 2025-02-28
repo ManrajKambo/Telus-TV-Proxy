@@ -1,5 +1,5 @@
 from concurrent.futures import ThreadPoolExecutor, as_completed
-from requests import head, get
+from requests import head, get, packages
 from flask import Flask, make_response, request
 from waitress import serve
 from random import choice
@@ -8,6 +8,8 @@ from json import loads, dumps
 from base64 import b64encode, b64decode
 from os import environ
 from datetime import datetime, timezone
+
+packages.urllib3.disable_warnings()
 
 #import logging
 #logger = logging.getLogger("waitress")
@@ -164,7 +166,7 @@ class TelusTV:
 			link_base += f"&start_time={dvr_start}&end_time={dvr_end}"
 
 		redirect_url = url_base % link_base
-		redirect_request = head(redirect_url, headers=self.requestHeaders, verify=False, proxies=self.__proxies) # Changed verify=True to verify=False due to the hour-ish outage they had due to a SSL configuration issue on Feb 25, 2025 - https://www.reddit.com/r/telus/s/0PlIdcLbH1
+		redirect_request = head(redirect_url, headers=self.requestHeaders, verify=False, proxies=self.__proxies) # Changed verify=True to verify=False due to the hour-ish outage Telus had due to a SSL misconfiguration on Feb 25, 2025 - https://www.reddit.com/r/telus/s/0PlIdcLbH1
 		response_headers = redirect_request.headers
 
 		if "Location" not in response_headers:
